@@ -1,17 +1,9 @@
 import React from "react"
 import { useQuery } from "@apollo/react-hooks"
 import gql from "graphql-tag"
+import Card from "./Card"
 import "./App.css"
 
-// const GET_USERS = gql`
-//   {
-//     users {
-//       id
-//       login
-//       avatar_url
-//     }
-//   }
-// `
 const GET_ALL_CHARACTERS = gql`
   {
     characters(filter: { name: "" }) {
@@ -32,19 +24,10 @@ const GET_ALL_CHARACTERS = gql`
 `
 
 const User = ({ character: { name, image } }) => (
-  <div className="Card">
-    <div>
-      <img alt="avatar" className="Card--avatar" src={image} />
-      <h1 className="Card--name">{name}</h1>
-    </div>
-    {/* <a href={`https://github.com/${login}`} className="Card--link">
-      See profile
-    </a> */}
-  </div>
+  <Card title={name} image={image} />
 )
 
 function AppNew() {
-  // const { loading, error, data } = useQuery(GET_USERS)
   const { loading, error, data } = useQuery(GET_ALL_CHARACTERS)
 
   if (error) return <h1>Something went wrong!</h1>
@@ -53,9 +36,11 @@ function AppNew() {
   return (
     <main className="App">
       <h1>RICK AND MORTY</h1>
-      {data.characters.results.map(character => (
+      {
+        data.characters.results.map(character => (
         <User key={character.id} character={character} />
-      ))}
+        ))
+      }
     </main>
   )
 }
